@@ -1,11 +1,8 @@
-package org.loop.example
+package org.loop.example.di
 
 import javax.inject.Qualifier
 
 
-/**
- * Created by loop on 09/12/14.
- */
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)

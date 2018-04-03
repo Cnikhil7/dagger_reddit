@@ -4,5 +4,6 @@
     <string name="app_name">kotlin-dagger-example</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="data_load_error_message">Error Loading Result</string>
 
 </resources>

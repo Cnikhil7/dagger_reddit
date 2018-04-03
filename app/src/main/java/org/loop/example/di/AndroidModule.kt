@@ -1,10 +1,14 @@
-package org.loop.example
+package org.loop.example.di
 
 import android.app.Application
 import android.content.Context
 import android.location.LocationManager
 import dagger.Module
 import dagger.Provides
+import org.loop.example.RedditApiInterface
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -24,17 +28,19 @@ class AndroidModule(private val application: Application) {
 
     @Provides
     @Singleton
-    fun provideLocationManager(): LocationManager =
-            application.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    fun provideRetrofit():Retrofit {
+        val retrofit = Retrofit.Builder()
+                .baseUrl("https://www.reddit.com/")
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+        return retrofit
+    }
 
     @Provides
     @Singleton
-    @Named("something")
-    fun provideSomething(): String = "something"
-
-    @Provides
-    @Singleton
-    @Named("somethingElse")
-    fun provideSomethingElse(): String = "somethingElse"
+    fun provideService(retrofit: Retrofit): RedditApiInterface {
+        return retrofit.create(RedditApiInterface::class.java)
+    }
 
 }
