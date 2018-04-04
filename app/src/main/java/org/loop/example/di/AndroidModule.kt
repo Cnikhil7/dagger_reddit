@@ -2,14 +2,13 @@ package org.loop.example.di
 
 import android.app.Application
 import android.content.Context
-import android.location.LocationManager
 import dagger.Module
 import dagger.Provides
+import okhttp3.OkHttpClient
 import org.loop.example.RedditApiInterface
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Named
 import javax.inject.Singleton
 
 /**
@@ -26,13 +25,19 @@ class AndroidModule(private val application: Application) {
     @ForApplication
     fun provideApplicationContext(): Context = application
 
+
     @Provides
     @Singleton
-    fun provideRetrofit():Retrofit {
+    fun provideClient(): OkHttpClient = OkHttpClient().newBuilder().build()
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(client: OkHttpClient): Retrofit {
         val retrofit = Retrofit.Builder()
                 .baseUrl("https://www.reddit.com/")
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
                 .build()
         return retrofit
     }
