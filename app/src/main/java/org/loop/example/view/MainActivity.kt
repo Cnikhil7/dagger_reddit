@@ -1,6 +1,7 @@
 package org.loop.example.view
 
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.OrientationHelper
@@ -129,6 +130,5 @@ class MainActivity : AppCompatActivity(), HomeActivityContract.View {
             presenter = null
         }
     }
-
 
 }

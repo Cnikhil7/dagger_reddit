@@ -20,7 +20,7 @@ class HomeAdapter(private val context: Context, var response: RedditResponse)
     : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
 
 
-    private val list = mutableListOf<Child>()
+    private var list = mutableListOf<Child>()
 
     init {
         if (response.data?.children != null) list.addAll(response.data.children)
@@ -45,20 +45,35 @@ class HomeAdapter(private val context: Context, var response: RedditResponse)
 
     fun updateList(response: RedditResponse) {
         this.response = response
-        val diffResult = DiffUtil.calculateDiff(DiffCallback(this.list, response.data.children))
-//        this.list.clear()
+
+        val diffResult = DiffUtil.calculateDiff(DiffCallback(this.list, getUpdatedList(response.data.children)), false)
         this.list.addAll(response.data.children)
         diffResult.dispatchUpdatesTo(this)
+
+
+    }
+
+    public fun requestList() : List<Child>{
+        return this.list
+    }
+
+
+    private fun getUpdatedList(newList: List<Child>): MutableList<Child> {
+        val list = arrayListOf<Child>()
+        list.addAll(this.list)
+        list.addAll(newList)
+        return list
     }
 
     fun requestNextKey(): String {
         return response.data.after ?: ""
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),View.OnClickListener {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         val thumb: ImageView = itemView.reddit_item_thumb
         val title: TextView = itemView.reddit_item_title
-        val container : ConstraintLayout = itemView.reddit_item_container
+        val container: ConstraintLayout = itemView.reddit_item_container
+
         init {
             container.setOnClickListener(this)
         }

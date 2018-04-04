@@ -70,7 +70,7 @@ class DataLoader : DataLoad {
 
     override fun onDestroy() {
         disposable?.clear()
-    }githu
+    }
 
 
 }
